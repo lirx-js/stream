@@ -1,0 +1,1 @@
+export * from './create-web-socket-stream-input-function-from-web-socket';
