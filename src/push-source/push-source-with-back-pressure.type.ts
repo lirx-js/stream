@@ -1,4 +1,3 @@
-
 import { Abortable, AsyncTask } from '@lirx/async-task';
 import { IPushSinkWithBackPressure } from '../push-sink/push-sink-with-back-pressure.type';
 

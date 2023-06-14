@@ -12,6 +12,14 @@ export interface IFilterPushPipeWithBackPressureFunction<GIn> {
 export function filterPushPipeWithBackPressure<GValue>(
   source: IPushSourceWithBackPressure<GValue>,
   filter: IFilterPushPipeWithBackPressureFunction<GValue>,
+): IPushSourceWithBackPressure<GValue>;
+export function filterPushPipeWithBackPressure<GIn, GOut extends GIn>(
+  source: IPushSourceWithBackPressure<GIn>,
+  filter: IFilterPushPipeWithBackPressureFunction<GIn>,
+): IPushSourceWithBackPressure<GOut>;
+export function filterPushPipeWithBackPressure<GValue>(
+  source: IPushSourceWithBackPressure<GValue>,
+  filter: IFilterPushPipeWithBackPressureFunction<GValue>,
 ): IPushSourceWithBackPressure<GValue> {
   return (
     sink: IPushSinkWithBackPressure<GValue>,

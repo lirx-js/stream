@@ -1,7 +1,6 @@
-
 import { Abortable, AsyncTask } from '@lirx/async-task';
-import { IPushSourceWithBackPressure } from '../push-source-with-back-pressure.type';
 import { IPushSinkWithBackPressure } from '../../push-sink/push-sink-with-back-pressure.type';
+import { IPushSourceWithBackPressure } from '../push-source-with-back-pressure.type';
 
 export function createPushSourceWithBackPressureFromArray<GValue>(
   array: ArrayLike<GValue>,

@@ -46,14 +46,15 @@ export function sharePushPipeWithBackPressure<GValue extends IAsyncTaskConstrain
               };
             }),
             abortable,
-          ).successful(() => {});
+          ).successful(() => {
+          });
         },
         _abortable,
-      )
-        .aborted(() => {}, abortable);
+      );
     }
 
-    return sourceTask;
+    return sourceTask
+      .switchAbortable(abortable);
   };
 }
 

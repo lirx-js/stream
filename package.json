@@ -11,8 +11,11 @@
   "license": "MIT",
   "access": "public",
   "sideEffects": false,
+  "scripts": {
+    "reinstall": "rm -rf ./node_modules && rm -f ./yarn.lock && yarn install"
+  },
   "dependencies": {
-    "@lirx/async-task": "^1.0.0",
-    "@lirx/utils": "^1.1.0"
+    "@lirx/async-task": "latest",
+    "@lirx/utils": "latest"
   }
 }
