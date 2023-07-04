@@ -9,6 +9,10 @@ export interface IAsyncTaskIteratorFactory<GValue extends IAsyncTaskConstraint<G
   ): Iterator<AsyncTask<GValue>, any, Abortable>;
 }
 
+/**
+ * @deprecated
+ * @param factory
+ */
 export function createPushSourceWithBackPressureFromAsyncTaskIteratorFactory<GValue extends IAsyncTaskConstraint<GValue>>(
   factory: IAsyncTaskIteratorFactory<GValue>,
 ): IPushSourceWithBackPressure<GValue> {

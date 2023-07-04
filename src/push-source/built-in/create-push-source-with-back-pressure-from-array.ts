@@ -18,7 +18,7 @@ export function createPushSourceWithBackPressureFromArray<GValue>(
           array[i],
           abortable,
         )
-          .successful(() => {
+          .successful((_, abortable: Abortable): AsyncTask<void> => {
             return loop(i + 1, abortable);
           });
       } else {

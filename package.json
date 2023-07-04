@@ -17,5 +17,8 @@
   "dependencies": {
     "@lirx/async-task": "latest",
     "@lirx/utils": "latest"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.2"
   }
 }
