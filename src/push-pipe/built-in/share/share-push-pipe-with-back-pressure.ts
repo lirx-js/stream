@@ -1,4 +1,4 @@
-import { Abortable, AsyncTask, IAbortFunction, IAsyncTaskConstraint, IAsyncTaskFactory } from '@lirx/async-task';
+import { Abortable, AsyncTask, IAsyncTaskConstraint, IAsyncTaskFactory, AbortableController } from '@lirx/async-task';
 import { IPushSinkWithBackPressure } from '../../../push-sink/push-sink-with-back-pressure.type';
 import { IPushSourceWithBackPressure } from '../../../push-source/push-source-with-back-pressure.type';
 
@@ -6,10 +6,8 @@ export function sharePushPipeWithBackPressure<GValue extends IAsyncTaskConstrain
   source: IPushSourceWithBackPressure<GValue>,
 ): IPushSourceWithBackPressure<GValue> {
   const sinks: IPushSinkWithBackPressure<GValue>[] = [];
-  let sourceTask: AsyncTask<void>;
-
-  let _abort: IAbortFunction;
-  let _abortable: Abortable;
+  let sharedTask: AsyncTask<void>;
+  let sharedAbortableController: AbortableController;
 
   return (
     sink: IPushSinkWithBackPressure<GValue>,
@@ -23,14 +21,14 @@ export function sharePushPipeWithBackPressure<GValue extends IAsyncTaskConstrain
       sinks.splice(sinks.indexOf(sink), 1);
 
       if (sinks.length === 0) {
-        _abort(reason);
+        sharedAbortableController.abort(reason);
       }
     });
 
     if (sinks.length === 1) {
-      [_abort, _abortable] = Abortable.derive();
+      sharedAbortableController = new AbortableController();
 
-      sourceTask = source(
+      sharedTask = source(
         (
           value: GValue,
           abortable: Abortable,
@@ -49,12 +47,11 @@ export function sharePushPipeWithBackPressure<GValue extends IAsyncTaskConstrain
           ).successful(() => {
           });
         },
-        _abortable,
+        sharedAbortableController.abortable,
       );
     }
 
-    return sourceTask
-      .switchAbortable(abortable);
+    return AsyncTask.switchAbortable(sharedTask, abortable);
   };
 }
 

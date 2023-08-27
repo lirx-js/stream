@@ -16,9 +16,10 @@
   },
   "dependencies": {
     "@lirx/async-task": "latest",
-    "@lirx/utils": "latest"
+    "@lirx/utils": "latest",
+    "@lirx/unsubscribe": "latest"
   },
   "devDependencies": {
-    "@types/jest": "^29.5.2"
+    "@types/jest": "^29.5.3"
   }
 }

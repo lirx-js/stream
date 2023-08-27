@@ -1,4 +1,4 @@
-import { Abortable, AsyncTask } from '@lirx/async-task';
+import { Abortable, AsyncTask, IAsyncTaskResolvedState } from '@lirx/async-task';
 import { IAsyncTaskConstraint } from '@lirx/async-task/src/async-task/types/async-task-constraint.type';
 import { IPushSinkWithBackPressure } from '../../push-sink/push-sink-with-back-pressure.type';
 import { IPushSourceWithBackPressure } from '../push-source-with-back-pressure.type';
@@ -42,17 +42,20 @@ export function createPushSourceWithBackPressureFromAsyncTaskIteratorFactory<GVa
         });
     };
 
-    return loop(abortable)
-      .errored((error: any): never => {
+    const task: AsyncTask<void> = loop(abortable);
+
+    AsyncTask.whenResolved(task, (state: IAsyncTaskResolvedState<void>): void => {
+      if (state.state === 'error') {
         if (typeof iterator.throw === 'function') {
-          iterator.throw(error);
+          iterator.throw(state.error);
         }
-        throw error;
-      })
-      .aborted((): void => {
+      } else if (state.state === 'abort') {
         if (typeof iterator.return === 'function') {
           iterator.return();
         }
-      });
+      }
+    });
+
+    return task;
   };
 }

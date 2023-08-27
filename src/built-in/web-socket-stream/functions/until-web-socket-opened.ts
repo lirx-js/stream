@@ -1,5 +1,6 @@
 import { Abortable, AsyncTask, IAsyncTaskErrorFunction, IAsyncTaskSuccessFunction } from '@lirx/async-task';
-import { createEventListener, IUnsubscribe, mergeUnsubscribeFunctions } from '@lirx/utils';
+import { createEventListener } from '@lirx/utils';
+import { IUnsubscribe, mergeUnsubscribeFunctions } from '@lirx/unsubscribe';
 import { createWebSocketError } from '../errors/create-web-socket-error';
 import { createWebSocketNotInAnOpeningStateError } from '../errors/create-web-socket-not-in-an-opening-state-error';
 
