@@ -1,4 +1,4 @@
-import { Abortable, AsyncTask } from '@lirx/async-task';
+import { Abortable, AsyncTask, IAsyncTaskInput } from '@lirx/async-task';
 import { IPushSinkWithBackPressure } from '../../push-sink/push-sink-with-back-pressure.type';
 import { IPushSourceWithBackPressure } from '../push-source-with-back-pressure.type';
 
@@ -14,10 +14,12 @@ export function createPushSourceWithBackPressureFromArray<GValue>(
       abortable: Abortable,
     ): AsyncTask<void> => {
       if (i < array.length) {
-        return sink(
-          array[i],
-          abortable,
-        )
+        return AsyncTask.fromFactory((abortable: Abortable): IAsyncTaskInput<void> => {
+          return sink(
+            array[i],
+            abortable,
+          );
+        }, abortable)
           .successful((_, abortable: Abortable): AsyncTask<void> => {
             return loop(i + 1, abortable);
           });

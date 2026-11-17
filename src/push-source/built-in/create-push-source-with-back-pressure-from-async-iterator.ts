@@ -1,4 +1,4 @@
-import { Abortable, AsyncTask } from '@lirx/async-task';
+import { Abortable, AsyncTask, IAsyncTaskInput } from '@lirx/async-task';
 import { IPushSinkWithBackPressure } from '../../push-sink/push-sink-with-back-pressure.type';
 import { IPushSourceWithBackPressure } from '../push-source-with-back-pressure.type';
 
@@ -12,13 +12,15 @@ export function createPushSourceWithBackPressureFromAsyncIterator<GValue>(
     const loop = (
       abortable: Abortable,
     ): AsyncTask<void> => {
-      return AsyncTask.fromFactory(() => iterator.next(), abortable)
+      return AsyncTask.fromFactory<IteratorResult<GValue>>((): Promise<IteratorResult<GValue>> => iterator.next(), abortable)
         .successful((result: IteratorResult<GValue>, abortable: Abortable): AsyncTask<void> | void => {
           if (!result.done) {
-            return sink(
-              result.value,
-              abortable,
-            )
+            return AsyncTask.fromFactory((abortable: Abortable): IAsyncTaskInput<void> => {
+              return sink(
+                result.value,
+                abortable,
+              );
+            }, abortable)
               .successful((_, abortable: Abortable): AsyncTask<void> => {
                 return loop(abortable);
               });

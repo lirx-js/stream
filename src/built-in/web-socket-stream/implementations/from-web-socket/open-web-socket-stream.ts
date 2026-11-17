@@ -1,13 +1,12 @@
-import { Abortable, AsyncTask } from '@lirx/async-task';
+import { AsyncTask, IAbortableOptions } from '@lirx/async-task';
 import { untilWebSocketOpened } from '../../functions/until-web-socket-opened';
 import { IWebSocketStream } from '../../web-socket-stream.type';
 import { createWebSocketStreamFromWebSocket } from './create-web-socket-stream-from-web-socket';
 
-export interface IOpenWebSocketStreamOptions {
-  url: string | URL;
-  abortable: Abortable;
-  binaryType?: BinaryType;
-  protocols?: string | string[];
+export interface IOpenWebSocketStreamOptions extends IAbortableOptions {
+  readonly url: string | URL;
+  readonly binaryType?: BinaryType;
+  readonly protocols?: string | string[];
 }
 
 export function openWebSocketStream(

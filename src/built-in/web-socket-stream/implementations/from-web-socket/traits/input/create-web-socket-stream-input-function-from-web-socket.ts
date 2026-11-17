@@ -1,4 +1,4 @@
-import { Abortable, AsyncTask, IAsyncTaskErrorFunction, IAsyncTaskSuccessFunction } from '@lirx/async-task';
+import { Abortable, AsyncTask, IAsyncTaskErrorFunction, IAsyncTaskInput, IAsyncTaskSuccessFunction } from '@lirx/async-task';
 import { createEventListener } from '@lirx/utils';
 import { IPushSinkWithBackPressure } from '../../../../../../push-sink/push-sink-with-back-pressure.type';
 import { createWebSocketError } from '../../../../errors/create-web-socket-error';
@@ -22,7 +22,7 @@ export function createWebSocketStreamInputFunctionFromWebSocket(
 
       const data: IWebSocketInValue[] = [];
       const successFunctionsList: IAsyncTaskSuccessFunction<IWebSocketInValue>[] = [];
-      let sinkQueue: AsyncTask<void> = AsyncTask.void(abortable);
+      let sinkQueue: IAsyncTaskInput<void> = AsyncTask.void(abortable);
 
       const unsubscribeOfMessage = createEventListener<'message', MessageEvent<IWebSocketInValue>>(socket, 'message', (event: MessageEvent<IWebSocketInValue>): void => {
         if (successFunctionsList.length > 0) {
@@ -53,7 +53,7 @@ export function createWebSocketStreamInputFunctionFromWebSocket(
         return untilData(abortable)
           .successful((
             data: IWebSocketInValue,
-          ): AsyncTask<void> => {
+          ): IAsyncTaskInput<void> => {
             return sinkQueue = sink(data, abortable);
           })
           .successful((): AsyncTask<void> => {
@@ -83,7 +83,7 @@ export function createWebSocketStreamInputFunctionFromWebSocket(
         abortable: Abortable,
       ): AsyncTask<void> => {
         return untilClose(abortable)
-          .successful((): AsyncTask<void> => {
+          .successful((): IAsyncTaskInput<void> => {
             return sinkQueue;
           });
       };

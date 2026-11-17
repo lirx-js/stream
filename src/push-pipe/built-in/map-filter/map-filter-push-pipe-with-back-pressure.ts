@@ -30,10 +30,11 @@ export function mapFilterPushPipeWithBackPressure<GIn, GOut extends IAsyncTaskCo
       value: GIn,
       abortable: Abortable,
     ): AsyncTask<void> => {
-      return AsyncTask.fromFactory<GOut>(() => mapFilter(value, abortable) as IAsyncTaskInput<GOut>, abortable)
+      return AsyncTask.fromFactory<GOut>((abortable: Abortable) => mapFilter(value, abortable) as IAsyncTaskInput<GOut>, abortable)
         .successful((
           value: GOut | IMapFilterPushPipeWithBackPressureDiscard,
-        ): AsyncTask<void> | void => {
+          abortable: Abortable,
+        ): IAsyncTaskInput<void> => {
           if (value !== MAP_FILTER_PUSH_PIPE_WITH_BACK_PRESSURE_DISCARD) {
             return sink(value, abortable);
           }

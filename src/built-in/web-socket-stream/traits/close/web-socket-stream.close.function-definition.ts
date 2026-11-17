@@ -1,6 +1,6 @@
 export interface IWebSocketStreamCloseOptions {
-  code?: number;
-  reason?: string;
+  readonly code?: number;
+  readonly reason?: string;
 }
 
 export interface IWebSocketStreamCloseFunction {

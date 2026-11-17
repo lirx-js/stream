@@ -1,16 +1,10 @@
 import { Abortable, AsyncTask, IAsyncTaskInput } from '@lirx/async-task';
+import { IPurePushSinkWithBackPressure } from './pure-push-sink-with-back-pressure.type';
 import { IPushSinkWithBackPressure } from './push-sink-with-back-pressure.type';
 
-export interface IPushSinkWithBackPressureLike<GValue> {
-  (
-    value: GValue,
-    abortable: Abortable,
-  ): IAsyncTaskInput<void>;
-}
-
-export function createPushSinkWithBackPressure<GValue>(
-  callback: IPushSinkWithBackPressureLike<GValue>,
-): IPushSinkWithBackPressure<GValue> {
+export function createPurePushSinkWithBackPressure<GValue>(
+  callback: IPushSinkWithBackPressure<GValue>,
+): IPurePushSinkWithBackPressure<GValue> {
   return (
     value: GValue,
     abortable: Abortable,

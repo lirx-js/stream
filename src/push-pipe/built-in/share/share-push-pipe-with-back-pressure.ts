@@ -1,7 +1,11 @@
-import { Abortable, AsyncTask, IAsyncTaskConstraint, IAsyncTaskFactory, AbortableController } from '@lirx/async-task';
+import { Abortable, AsyncTask, IAsyncTaskConstraint, IAsyncTaskFactory, AbortableController, IAsyncTaskInput } from '@lirx/async-task';
+import { noop } from '@lirx/utils';
 import { IPushSinkWithBackPressure } from '../../../push-sink/push-sink-with-back-pressure.type';
 import { IPushSourceWithBackPressure } from '../../../push-source/push-source-with-back-pressure.type';
 
+/**
+ * TODO Relay and ReplayLast
+ */
 export function sharePushPipeWithBackPressure<GValue extends IAsyncTaskConstraint<GValue>>(
   source: IPushSourceWithBackPressure<GValue>,
 ): IPushSourceWithBackPressure<GValue> {
@@ -39,13 +43,12 @@ export function sharePushPipeWithBackPressure<GValue extends IAsyncTaskConstrain
             ): IAsyncTaskFactory<void> => {
               return (
                 abortable: Abortable,
-              ): AsyncTask<void> => {
+              ): IAsyncTaskInput<void> => {
                 return sink(value, abortable);
               };
             }),
             abortable,
-          ).successful(() => {
-          });
+          ).successful(noop);
         },
         sharedAbortableController.abortable,
       );

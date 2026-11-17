@@ -1,4 +1,4 @@
-import { Abortable, AsyncTask } from '@lirx/async-task';
+import { Abortable, AsyncTask, IAsyncTaskInput } from '@lirx/async-task';
 import {
   EQUAL_FUNCTION_STRICT_EQUAL,
   getDistinctPreviousValueFromDistinctInitialValueOptions,
@@ -25,15 +25,13 @@ export function distinctPushPipeWithBackPressure<GValue>(
     return source((
       value: GValue,
       abortable: Abortable,
-    ): AsyncTask<void> => {
+    ): IAsyncTaskInput<void> => {
       if (
         (previousValue === UNINITIALIZED_TOKEN)
         || !equal(value, previousValue)
       ) {
         previousValue = value;
         return sink(value, abortable);
-      } else {
-        return AsyncTask.void(abortable);
       }
     }, abortable);
   };

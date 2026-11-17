@@ -1,5 +1,8 @@
 import { IWebSocketStream } from '../../web-socket-stream.type';
 import { createWebSocketStreamCloseFunctionFromWebSocket } from './traits/close/create-web-socket-stream-close-function-from-web-socket';
+import {
+  createWebSocketStreamGetStateFunctionFromWebSocket
+} from './traits/get-state/create-web-socket-stream-get-state-function-from-web-socket';
 import { createWebSocketStreamInputFunctionFromWebSocket } from './traits/input/create-web-socket-stream-input-function-from-web-socket';
 import { createWebSocketStreamOutputFunctionFromWebSocket } from './traits/output/create-web-socket-stream-output-function-from-web-socket';
 import {
@@ -11,12 +14,14 @@ export function createWebSocketStreamFromWebSocket(
 ): IWebSocketStream {
   const input$ = createWebSocketStreamInputFunctionFromWebSocket(socket);
   const $output = createWebSocketStreamOutputFunctionFromWebSocket(socket);
+  const getState = createWebSocketStreamGetStateFunctionFromWebSocket(socket);
   const close = createWebSocketStreamCloseFunctionFromWebSocket(socket);
   const untilClosed = createWebSocketStreamUntilClosedFunctionFromWebSocket(socket);
 
   return {
     input$,
     $output,
+    getState,
     close,
     untilClosed,
   };

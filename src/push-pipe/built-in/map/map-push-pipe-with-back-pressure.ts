@@ -21,12 +21,8 @@ export function mapPushPipeWithBackPressure<GIn, GOut extends IAsyncTaskConstrai
       value: GIn,
       abortable: Abortable,
     ): AsyncTask<void> => {
-      return AsyncTask.fromFactory<GOut>(() => map(value, abortable), abortable)
-        .successful((
-          value: GOut,
-        ): AsyncTask<void> => {
-          return sink(value, abortable);
-        });
+      return AsyncTask.fromFactory<GOut>((abortable: Abortable) => map(value, abortable), abortable)
+        .successful(sink);
     }, abortable);
   };
 }

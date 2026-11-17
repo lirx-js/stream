@@ -29,10 +29,11 @@ export function filterPushPipeWithBackPressure<GValue>(
       value: GValue,
       abortable: Abortable,
     ): AsyncTask<void> => {
-      return AsyncTask.fromFactory<boolean>(() => filter(value, abortable), abortable)
+      return AsyncTask.fromFactory<boolean>((abortable: Abortable) => filter(value, abortable), abortable)
         .successful((
           pass: boolean,
-        ): AsyncTask<void> | void => {
+          abortable: Abortable,
+        ): IAsyncTaskInput<void> => {
           if (pass) {
             return sink(value, abortable);
           }
